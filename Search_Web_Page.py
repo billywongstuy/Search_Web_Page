@@ -62,7 +62,7 @@ searchtext = dictolist(page)
 
 @app.route("/")
 def words():
-    return render_template("main.html",content = searchtext,stuff="");
+    return render_template("main.html",content = searchtext,stuff=link);
     #return render_template("main.html",content = searchtext,stuff=page);
 
 
