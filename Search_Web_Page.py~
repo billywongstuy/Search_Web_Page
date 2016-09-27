@@ -1,0 +1,57 @@
+from flask import Flask, render_template
+app = Flask(__name__)
+import urllib
+import re
+
+link = "http://google.com"
+page = urllib.request.urlopen(link).read()
+
+
+a = open('lit.txt','r')
+b = a.read()
+
+def wordstolist(text):
+    selection = []
+    word = ''
+    text = text.replace('\n',',')
+    for character in text:
+        if ord(character) >= 65 and ord(character) <= 90 or ord(character) >= 97 and ord(character) <= 122:
+            word += character
+        else:
+            if word != '':
+                selection.append(word)
+            word = ''
+    return selection
+
+def freq(text):
+    frequency = {}
+    words = wordstolist(text)
+    for word in words:
+        if word.lower() not in frequency:
+            frequency[word.lower()] = 1
+        else:
+            frequency[word.lower()] += 1
+    return frequency
+
+def dictolist(text):
+    listee = []
+    text2 = freq(text)
+    for key, value in text2.items():
+        listee.append([value,key])
+    listee.sort()
+    listee.reverse()
+    listee = listee[:60]
+    return listee
+
+
+searchtext = dictolist(b)
+
+
+@app.route("/")
+def words():
+    return render_template("main.html",content = searchtext,stuff=page);
+
+
+if __name__ == "__main__":
+    app.debug = True
+    app.run()
